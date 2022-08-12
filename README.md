@@ -21,7 +21,7 @@ curl -sSLf https://get.k0s.sh | sudo sh
 
 ## Install k0s cluster
 ```bash
-sudo k0s install controller --single
+sudo k0s install controller --single -c /etc/k0s/k0s.yaml
 sudo k0s start
 ```
 
