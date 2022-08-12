@@ -1,0 +1,23 @@
+name: "in-cluster"
+address: "https://kubernetes.default.svc"
+values: |
+  ## RBAC creation for controller and speaker
+  ##
+  rbac:
+    ## @param rbac.create Specifies whether to install and use RBAC rules
+    ##
+    create: true
+
+  extraDeploy:
+    - apiVersion: metallb.io/v1beta1
+      kind: IPAddressPool
+      metadata:
+        name: prod
+      spec:
+        addresses:
+        - 149.202.65.122-149.202.65.122
+
+    - apiVersion: metallb.io/v1beta1
+      kind: L2Advertisement
+      metadata:
+        name: prod
