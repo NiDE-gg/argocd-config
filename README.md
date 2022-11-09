@@ -56,3 +56,8 @@ cd argocd
 helm repo add argo https://argoproj.github.io/argo-helm
 helm install -n argocd --create-namespace argo-cd argo/argo-cd --version 4.10.3 --values argocd/clusters/k0s-nide.yml
 ```
+
+## Install argocd application
+```bash
+kubectl apply -f metallb/applicationset.yml -n argocd
+```
