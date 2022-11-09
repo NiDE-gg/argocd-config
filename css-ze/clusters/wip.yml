@@ -1,0 +1,1155 @@
+## @section Global parameters
+## Please, note that this will override the parameters, including dependencies, configured to use the global value
+##
+global:
+  ## @param global.imageRegistry Global Docker image registry
+  ##
+  imageRegistry: ""
+  ## @param global.imagePullSecrets Global Docker registry secret names as an array
+  ## e.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  ## @param global.storageClass Global StorageClass for Persistent Volume(s)
+  ##
+  storageClass: ""
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride: ""
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
+##
+extraDeploy: []
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+## Enable diagnostic mode in the statefulset
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the statefulset
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the statefulset
+  ##
+  args:
+    - infinity
+
+## @section common parameters
+##
+
+## image version
+## ref: https://hub.docker.com/r/srcdslab/srcds/tags/
+## @param image.registry image registry
+## @param image.repository image repository
+## @param image.tag image tag (immutable tags are recommended)
+## @param image.pullPolicy image pull policy
+## @param image.pullSecrets Specify image pull secrets
+## @param image.debug Specify if debug values should be set
+##
+image:
+  registry: docker.io
+  repository: maxime1907/srcds
+  tag: v0.0.5
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: "IfNotPresent"
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
+## SRCDS container ports
+##
+containerPorts:
+  ## @param containerPorts.game
+  ##
+  game: 30016
+  ## @param containerPorts.sourcetv
+  ##
+  sourcetv: 30021
+  ## @param containerPorts.client
+  ##
+  client: 30006
+  ## @param containerPorts.steam
+  ##
+  steam: 30901
+
+## Start pod(s) without limitations on shm memory.
+## By default docker and containerd (and possibly other container runtimes) limit `/dev/shm` to `64M`
+## ref: https://github.com/containerd/containerd/issues/3654
+##
+shmVolume:
+  ## @param shmVolume.enabled Enable emptyDir volume for /dev/shm for srcds pod(s)
+  ##
+  enabled: true
+  ## @param shmVolume.sizeLimit Set this to enable a size limit on the shm tmpfs
+  ## Note: the size of the tmpfs counts against container's memory limit
+  ## e.g:
+  ## sizeLimit: 1Gi
+  ##
+  sizeLimit: ""
+
+## @section STEAM parameters
+##
+steam:
+  ## @param steam.user Steam user to connect to the api
+  ##
+  user: "anonymous"
+  ## @param steam.pass Steam password to connect to the api
+  ##
+  pass: ""
+  ## @param steam.pass Steam auth to connect to the api
+  ##
+  auth: ""
+  ## @param steam.additionalArgs Additional arguments to pass to steamcmd
+  ##
+  additionalArgs: []
+
+srcdsknight:
+  image:
+    repository: "ghcr.io/srcdslab/srcdsknight"
+    tag: "v0.0.2"
+  args:
+    - "-vv"
+  existingConfigmap: ""
+  config: |
+    installPath: "/app/cstrike"
+
+    ## @param srcds.dependencies.folders Folders that will be extracted from the dependency archive
+    ##
+    folders:
+      ## @param srcds.dependencies.folders.gametype Gametype folder that will be extracted from the dependency archive
+      ##
+      gametype:
+        path: ""
+      ## @param srcds.dependencies.folders.common Common list of folders that will be extracted from the dependency archive
+      ##
+      common:
+        paths:
+          - "common"
+          - ""
+      directories:
+        addons:
+          path: "addons"
+        cfg:
+          path: "cfg"
+        models:
+          path: "models"
+        materials:
+          path: "materials"
+        sound:
+          path: "sound"
+    ## @param srcds.cache Cache of links
+    ##
+    cache:
+      ## @param srcds.cache.enabled Enable cache
+      ##
+      enabled: true
+    ## @param srcds.skipFailedDownload Skip failed download link
+    ##
+    skipFailedDownload: true
+    ## @param srcds.dependencies.links List of links for srcds dependencies
+    ##
+    links:
+      # Core
+      metamod:
+        url: https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1148-linux.tar.gz
+      sourcemod:
+        url: https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6906-linux.tar.gz
+
+      # Sourcemod extensions
+      a2sqcache:
+        url: https://github.com/srcdslab/sm-ext-a2sqcache/releases/download/1.1.0/sm-ext-a2sqcache-1.1.0-linux.tar.gz
+      accelerator:
+        url: https://github.com/srcdslab/sm-ext-accelerator/releases/download/2.5.0/sm-ext-accelerator-2.5.0-linux.tar.gz
+      asyncsocket:
+        url: https://github.com/srcdslab/sm-ext-asyncsocket/releases/download/1.0.0/sm-ext-asyncsocket-1.0.0-linux.tar.gz
+      connect:
+        url: https://github.com/srcdslab/sm-ext-connect/releases/download/2.6.1/sm-ext-connect-2.6.1-linux.tar.gz
+      cleaner:
+        url: https://github.com/srcdslab/sm-ext-cleaner/releases/download/1.3.0/sm-ext-cleaner-1.3.0-linux.tar.gz
+      cssfixes:
+        url: https://github.com/srcdslab/sm-ext-cssfixes/releases/download/1.17.0/sm-ext-cssfixes-1.17.0-linux.tar.gz
+      outputinfo:
+        url: https://github.com/srcdslab/sm-ext-outputinfo/releases/download/1.1.0/sm-ext-outputinfo-1.1.0-linux.tar.gz
+      physhooks:
+        url: https://github.com/srcdslab/sm-ext-physhooks/releases/download/1.0.0/sm-ext-physhooks-1.0.0-linux.tar.gz
+      ripext:
+        url: https://github.com/srcdslab/sm-ext-ripext/releases/download/1.3.1/sm-ext-ripext-1.3.1-linux.tar.gz
+      sendsnapshotfixer:
+        url: https://github.com/srcdslab/sm-ext-sendsnapshotfixer/releases/download/1.0.0/sm-ext-sendsnapshotfixer-1.0.0-linux.tar.gz
+      smjansson:
+        url: https://github.com/srcdslab/sm-ext-SMJansson/releases/download/2.6.1/sm-ext-SMJansson-2.6.1-linux.tar.gz
+      steamworks:
+        url: https://github.com/srcdslab/sm-ext-SteamWorks/releases/download/1.2.3/sm-ext-SteamWorks-1.2.3-linux.tar.gz
+      voice:
+        url: https://github.com/srcdslab/sm-ext-voice/releases/download/2.0.0/sm-ext-voice-2.0.0-linux.tar.gz
+
+      # Sourcemod plugins
+      afkmanager:
+        url: https://github.com/srcdslab/sm-plugin-AFKManager/releases/download/latest/sm-plugin-AFKManager-latest.tar.gz
+      adminlogging:
+        url: https://github.com/srcdslab/sm-plugin-AdminLogging/releases/download/latest/sm-plugin-AdminLogging-latest.tar.gz
+      advancedadminlist:
+        url: https://github.com/srcdslab/sm-plugin-AdvancedAdminList/releases/download/latest/sm-plugin-AdvancedAdminList-latest.tar.gz
+      advancedtargeting:
+        url: https://github.com/srcdslab/sm-plugin-AdvancedTargeting/releases/download/latest/sm-plugin-AdvancedTargeting-latest.tar.gz
+      antibhopcheat:
+        url: https://github.com/srcdslab/sm-plugin-AntiBhopCheat/releases/download/latest/sm-plugin-AntiBhopCheat-latest.tar.gz
+      antiflood:
+        url: https://github.com/srcdslab/sm-plugin-AntiFlood/releases/download/latest/sm-plugin-AntiFlood-latest.tar.gz
+      antijumpspam:
+        url: https://github.com/srcdslab/sm-plugin-AntiJumpSpam/releases/download/latest/sm-plugin-AntiJumpSpam-latest.tar.gz
+      autorecorder:
+        url: https://github.com/srcdslab/sm-plugin-AutoRecorder/releases/download/latest/sm-plugin-AutoRecorder-latest.tar.gz
+      buttonnotifier:
+        url: https://github.com/srcdslab/sm-plugin-ButtonNotifier/releases/download/latest/sm-plugin-ButtonNotifier-latest.tar.gz
+      cidr:
+        url: https://github.com/srcdslab/sm-plugin-CIDR/releases/download/latest/sm-plugin-CIDR-latest.tar.gz
+      calladmin:
+        url: https://github.com/srcdslab/sm-plugin-CallAdmin/releases/download/latest/sm-plugin-CallAdmin-latest.tar.gz
+      cashmanager:
+        url: https://github.com/srcdslab/sm-plugin-CashManager/releases/download/latest/sm-plugin-CashManager-latest.tar.gz
+      commandhelper:
+        url: https://github.com/srcdslab/sm-plugin-CommandHelper/releases/download/latest/sm-plugin-CommandHelper-latest.tar.gz
+      convarsuppression:
+        url: https://github.com/srcdslab/sm-plugin-ConVarSuppression/releases/download/latest/sm-plugin-ConVarSuppression-latest.tar.gz
+      connectannounce:
+        url: https://github.com/srcdslab/sm-plugin-ConnectAnnounce/releases/download/latest/sm-plugin-ConnectAnnounce-latest.tar.gz
+      consolechatmanager:
+        url: https://github.com/srcdslab/sm-plugin-ConsoleChatManager/releases/download/latest/sm-plugin-ConsoleChatManager-latest.tar.gz
+      countrytags:
+        url: https://github.com/srcdslab/sm-plugin-CountryTags/releases/download/latest/sm-plugin-CountryTags-latest.tar.gz
+      customchatcolors:
+        url: https://github.com/srcdslab/sm-plugin-CustomChatColors/releases/download/latest/sm-plugin-CustomChatColors-latest.tar.gz
+      discord:
+        url: https://github.com/srcdslab/sm-plugin-Discord/releases/download/latest/sm-plugin-Discord-latest.tar.gz
+      devzones:
+        url: https://github.com/srcdslab/sm-plugin-DevZones/releases/download/latest/sm-plugin-DevZones-latest.tar.gz
+      extend:
+        url: https://github.com/srcdslab/sm-plugin-Extend/releases/download/latest/sm-plugin-Extend-latest.tar.gz
+      extracommands:
+        url: https://github.com/srcdslab/sm-plugin-ExtraCommands/releases/download/latest/sm-plugin-ExtraCommands-latest.tar.gz
+      fakeclients:
+        url: https://github.com/srcdslab/sm-plugin-FakeClients/releases/download/latest/sm-plugin-FakeClients-latest.tar.gz
+      familysharemanager:
+        url: https://github.com/srcdslab/sm-plugin-FamilyShareManager/releases/download/latest/sm-plugin-FamilyShareManager-latest.tar.gz
+      fixconnectionexploit:
+        url: https://github.com/srcdslab/sm-plugin-FixConnectionExploit/releases/download/latest/sm-plugin-FixConnectionExploit-latest.tar.gz
+      fixfirebullets:
+        url: https://github.com/maxime1907/sm-plugin-fixfirebullets/releases/download/latest/fixfirebullets-latest.tar.gz
+      fixfuncrotating:
+        url: https://github.com/maxime1907/sm-plugin-FixFuncRotating/releases/download/latest/FixFuncRotating-latest.tar.gz
+      fixgameui:
+        url: https://github.com/maxime1907/sm-plugin-FixGameUI/releases/download/latest/FixGameUI-latest.tar.gz
+      fixladdergravity:
+        url: https://github.com/maxime1907/sm-plugin-FixLadderGravity/releases/download/latest/FixLadderGravity-latest.tar.gz
+      fixmemoryleak:
+        url: https://github.com/maxime1907/sm-plugin-FixMemoryLeak/releases/download/latest/FixMemoryLeak-latest.tar.gz
+      fixnapalmlag:
+        url: https://github.com/maxime1907/sm-plugin-FixNapalmLag/releases/download/latest/FixNapalmLag-latest.tar.gz
+      fixnetpublicadr:
+        url: https://github.com/maxime1907/sm-plugin-FixNetPublicAdr/releases/download/latest/FixNetPublicAdr-latest.tar.gz
+      fixplayerequip:
+        url: https://github.com/maxime1907/sm-plugin-FixPlayerEquip/releases/download/latest/FixPlayerEquip-latest.tar.gz
+      fixpointviewcontrol:
+        url: https://github.com/maxime1907/sm-plugin-FixPointViewControl/releases/download/latest/FixPointViewControl-latest.tar.gz
+      fixrng:
+        url: https://github.com/maxime1907/sm-plugin-FixRNG/releases/download/latest/FixRNG-latest.tar.gz
+      fixrptexploit:
+        url: https://github.com/maxime1907/sm-plugin-FixRPTExploit/releases/download/latest/FixRPTExploit-latest.tar.gz
+      fixsprayexploit:
+        url: https://github.com/maxime1907/sm-plugin-FixSprayExploit/releases/download/latest/FixSprayExploit-latest.tar.gz
+      fixsvgravity:
+        url: https://github.com/maxime1907/sm-plugin-FixSvGravity/releases/download/latest/FixSvGravity-latest.tar.gz
+      fixupdateradar:
+        url: https://github.com/maxime1907/sm-plugin-FixUpdateRadar/releases/download/latest/FixUpdateRadar-latest.tar.gz
+      flashlight:
+        url: https://github.com/maxime1907/sm-plugin-Flashlight/releases/download/latest/Flashlight-latest.tar.gz
+      forceinputs:
+        url: https://github.com/maxime1907/sm-plugin-ForceInputs/releases/download/latest/ForceInputs-latest.tar.gz
+      fullupdate:
+        url: https://github.com/maxime1907/sm-plugin-FulUpdate/releases/download/latest/FulUpdate-latest.tar.gz
+      glowcolors:
+        url: https://github.com/maxime1907/sm-plugin-GlowColors/releases/download/latest/GlowColors-latest.tar.gz
+      hitmarker:
+        url: https://github.com/srcdslab/sm-plugin-HitMarker/releases/download/latest/sm-plugin-HitMarker-latest.tar.gz
+      lagreducer:
+        url: https://github.com/srcdslab/sm-plugin-LagReducer/releases/download/latest/sm-plugin-LagReducer-latest.tar.gz
+      mapnotification:
+        url: https://github.com/srcdslab/sm-plugin-MapNotification/releases/download/latest/sm-plugin-MapNotification-latest.tar.gz
+      mapchooserextended:
+        url: https://github.com/srcdslab/sm-plugin-mapchooser_extended/releases/download/latest/sm-plugin-mapchooser_extended-latest.tar.gz
+      mvpstars:
+        url: https://github.com/srcdslab/sm-plugin-MVPStars/releases/download/latest/sm-plugin-MVPStars-latest.tar.gz
+      namefilter:
+        url: https://github.com/srcdslab/sm-plugin-NameFilter/releases/download/latest/sm-plugin-NameFilter-latest.tar.gz
+      noshake:
+        url: https://github.com/srcdslab/sm-plugin-NoShake/releases/download/latest/sm-plugin-NoShake-latest.tar.gz
+      playermanager:
+        url: https://github.com/srcdslab/sm-plugin-PlayerManager/releases/download/latest/sm-plugin-PlayerManager-latest.tar.gz
+      proxykiller:
+        url: https://github.com/srcdslab/sm-plugin-ProxyKiller/releases/download/latest/sm-plugin-ProxyKiller-latest.tar.gz
+      radiomute:
+        url: https://github.com/srcdslab/sm-plugin-RadioMute/releases/download/latest/sm-plugin-RadioMute-latest.tar.gz
+      radiospamblock:
+        url: https://github.com/srcdslab/sm-plugin-RadioSpamBlock/releases/download/latest/sm-plugin-RadioSpamBlock-latest.tar.gz
+      reservedslot:
+        url: https://github.com/srcdslab/sm-plugin-ReservedSlot/releases/download/latest/sm-plugin-ReservedSlot-latest.tar.gz
+      roundtime:
+        url: https://github.com/srcdslab/sm-plugin-RoundTime/releases/download/latest/sm-plugin-RoundTime-latest.tar.gz
+      smac:
+        url: https://github.com/srcdslab/sm-plugin-SMAC/releases/download/latest/sm-plugin-SMAC-latest.tar.gz
+      smjsonapi:
+        url: https://github.com/srcdslab/sm-plugin-SMJSONAPI/releases/download/latest/sm-plugin-SMJSONAPI-latest.tar.gz
+      smtextreplace:
+        url: https://github.com/srcdslab/sm-plugin-SMTextReplace/releases/download/latest/sm-plugin-SMTextReplace-latest.tar.gz
+      selectivebhop:
+        url: https://github.com/srcdslab/sm-plugin-SelectiveBhop/releases/download/latest/sm-plugin-SelectiveBhop-latest.tar.gz
+      selfmute:
+        url: https://github.com/srcdslab/sm-plugin-SelfMute/releases/download/latest/sm-plugin-SelfMute-latest.tar.gz
+      selfmuteradio:
+        url: https://github.com/srcdslab/sm-plugin-SelfMuteRadio/releases/download/latest/sm-plugin-SelfMuteRadio-latest.tar.gz
+      serveradvertisement:
+        url: https://github.com/srcdslab/sm-plugin-ServerAdvertisement/releases/download/latest/sm-plugin-ServerAdvertisement-latest.tar.gz
+      sourcechatrelay:
+        url: https://github.com/srcdslab/sm-plugin-SourceChatRelay/releases/download/latest/sm-plugin-SourceChatRelay-latest.tar.gz
+      spectate:
+        url: https://github.com/srcdslab/sm-plugin-Spectate/releases/download/latest/sm-plugin-Spectate-latest.tar.gz
+      spraymanager:
+        url: https://github.com/srcdslab/sm-plugin-SprayManager/releases/download/latest/sm-plugin-SprayManager-latest.tar.gz
+      status:
+        url: https://github.com/srcdslab/sm-plugin-Status/releases/download/latest/sm-plugin-Status-latest.tar.gz
+      stopsound:
+        url: https://github.com/srcdslab/sm-plugin-StopSound/releases/download/latest/sm-plugin-StopSound-latest.tar.gz
+      teleport:
+        url: https://github.com/srcdslab/sm-plugin-Teleport/releases/download/latest/sm-plugin-Teleport-latest.tar.gz
+      thirdperson:
+        url: https://github.com/srcdslab/sm-plugin-ThirdPerson/releases/download/latest/sm-plugin-ThirdPerson-latest.tar.gz
+      teammanager:
+        url: https://github.com/srcdslab/sm-plugin-TeamManager/releases/download/latest/sm-plugin-TeamManager-latest.tar.gz
+      vipcore:
+        url: https://github.com/srcdslab/sm-plugin-VIP-Core/releases/download/latest/sm-plugin-VIP_Core-latest.tar.gz
+      vipcustomfeatures:
+        url: https://github.com/srcdslab/sm-plugin-VIP-CustomFeatures/releases/download/latest/sm-plugin-VIP_CustomFeatures-latest.tar.gz
+      vipfreevipgiveaway:
+        url: https://github.com/srcdslab/sm-plugin-VIP-FreeVIPGiveaway/releases/download/latest/sm-plugin-VIP_FreeVIPGiveaway-latest.tar.gz
+      vipsourcemodflags:
+        url: https://github.com/srcdslab/sm-plugin-VIP-SourcemodFlags/releases/download/latest/sm-plugin-VIP_SourcemodFlags-latest.tar.gz
+      viptag:
+        url: https://github.com/srcdslab/sm-plugin-VIP-Tag/releases/download/latest/sm-plugin-VIP_Tag-latest.tar.gz
+      viptest:
+        url: https://github.com/srcdslab/sm-plugin-VIP-Test/releases/download/latest/sm-plugin-VIP_Test-latest.tar.gz
+      vipvipsonline:
+        url: https://github.com/srcdslab/sm-plugin-VIP-VIPsOnline/releases/download/latest/sm-plugin-VIP_VIPsOnline-latest.tar.gz
+      zombiereloaded:
+        url: https://github.com/srcdslab/sm-plugin-zombiereloaded/releases/download/latest/sm-plugin-zombiereloaded-latest.tar.gz
+
+
+## @section SRCDS parameters
+##
+srcds:
+  ## @param srcds.console Console parameters
+  ##
+  console:
+    ## @param srcds.console.enabled Enable attaching to the container to access console
+    ##
+    enabled: true
+  ## @param srcds.appid Application ID https://developer.valvesoftware.com/wiki/Dedicated_Servers_List
+  ##
+  appid: "232330"
+  ## @param srcds.gslt GSLT token that will be used for this server
+  ## https://steamcommunity.com/dev/managegameservers
+  ##
+  gslt: ""
+  ## @param srcds.hostname Name of the server
+  ##
+  hostname: "Source Engine Dedicated Server"
+  ## @param srcds.hostname Game type
+  ## cstrike, csgo...
+  ##
+  gametype: "cstrike"
+  ## @param srcds.ip Server ip
+  ##
+  ip: "0.0.0.0"
+  ## @param srcds.tickrate tickrate
+  ##
+  tickrate: 128
+  ## @param srcds.fps maximum server fps
+  ##
+  fps: 144
+  ## @param srcds.maxplayers maximum players
+  ##
+  maxplayers: 64
+  ## @param srcds.region The region of the world to report this server in
+  ## 0 - US East, 1 - US West, 2 - South America, 3 - Europe, 4 - Asia, 5 - Australia, 6 - Middle East, 7 - Africa, 255 - World (default)
+  ##
+  region: 255
+  ## @param srcds.map Map that will be launched at server startup
+  ##
+  map: "de_dust2"
+  ## @param srcds.additionalArgs Additional arguments to pass to startup
+  ##
+  additionalArgs: []
+  ## @param srcds.existingSecret Exisiting secret name where sentitive server config is stored
+  ##
+  existingSecret: ""
+  ## @param srcds.configuration srcds main configuration to be injected as ConfigMap
+  ##
+  configuration: ""
+  ## @param srcds.existingConfigmap Name of an existing ConfigMap with srcds configuration
+  ## NOTE: `srcds.configuration` and `srcds.pgHbaConfiguration` will be ignored
+  ##
+  existingConfigmap: ""
+  ## @param srcds.extraEnvVars Array with extra environment variables to add to srcds nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param srcds.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for srcds nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param srcds.extraEnvVarsSecret Name of existing Secret containing extra env vars for srcds nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param srcds.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param srcds.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## Configure extra options for srcds containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param srcds.livenessProbe.enabled Enable livenessProbe on srcds containers
+  ## @param srcds.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param srcds.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param srcds.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param srcds.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param srcds.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param srcds.readinessProbe.enabled Enable readinessProbe on srcds containers
+  ## @param srcds.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param srcds.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param srcds.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param srcds.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param srcds.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param srcds.startupProbe.enabled Enable startupProbe on srcds containers
+  ## @param srcds.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param srcds.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param srcds.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param srcds.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param srcds.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param srcds.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param srcds.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param srcds.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param srcds.lifecycleHooks for the srcds container to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## srcds resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param srcds.resources.limits The resources limits for the srcds containers
+  ## @param srcds.resources.requests.memory The requested memory for the srcds containers
+  ## @param srcds.resources.requests.cpu The requested cpu for the srcds containers
+  ##
+  resources:
+    limits: {}
+    requests:
+      memory: 512Mi
+      cpu: 100m
+  ## Pod Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param srcds.podSecurityContext.enabled Enable security context
+  ## @param srcds.podSecurityContext.fsGroup Group ID for the pod
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param srcds.containerSecurityContext.enabled Enable container security context
+  ## @param srcds.containerSecurityContext.runAsUser User ID for the container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+  ## @param srcds.hostAliases srcds pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param srcds.hostNetwork Specify if host network should be enabled for pod (srcds)
+  ##
+  hostNetwork: false
+  ## @param srcds.hostIPC Specify if host IPC should be enabled for pod (srcds)
+  ##
+  hostIPC: false
+  ## @param srcds.labels Map of labels to add to the statefulset (srcds)
+  ##
+  labels: {}
+  ## @param srcds.annotations Annotations for srcds pods
+  ##
+  annotations: {}
+  ## @param srcds.podLabels Map of labels to add to the pods (srcds)
+  ##
+  podLabels: {}
+  ## @param srcds.podAnnotations Map of annotations to add to the pods (srcds)
+  ##
+  podAnnotations: {}
+  ## @param srcds.podAffinityPreset srcds pod affinity preset. Ignored if `srcds.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param srcds.podAntiAffinityPreset srcds pod anti-affinity preset. Ignored if `srcds.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## srcds node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param srcds.nodeAffinityPreset.type srcds node affinity preset type. Ignored if `srcds.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param srcds.nodeAffinityPreset.key srcds node label key to match Ignored if `srcds.affinity` is set.
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## @param srcds.nodeAffinityPreset.values srcds node label values to match. Ignored if `srcds.affinity` is set.
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param srcds.affinity Affinity for srcds pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: srcds.podAffinityPreset, srcds.podAntiAffinityPreset, and srcds.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param srcds.nodeSelector Node labels for srcds pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param srcds.tolerations Tolerations for srcds pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param srcds.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param srcds.priorityClassName Priority Class to use for each pod (srcds)
+  ##
+  priorityClassName: ""
+  ## @param srcds.schedulerName Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param srcds.terminationGracePeriodSeconds Seconds srcds pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: "1"
+  ## @param srcds.updateStrategy.type srcds statefulset strategy type
+  ## @param srcds.updateStrategy.rollingUpdate srcds statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param srcds.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the srcds container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param srcds.extraVolumes Optionally specify extra list of additional volumes for the srcds pod(s)
+  ##
+  extraVolumes: []
+  ## @param srcds.sidecars Add additional sidecar containers to the srcds pod(s)
+  ## For example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param srcds.initContainers Add additional init containers to the srcds pod(s)
+  ## Example
+  ##
+  ## initContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  initContainers: []
+  ## @param srcds.extraPodSpec Optionally specify extra PodSpec for the srcds pod(s)
+  ##
+  extraPodSpec: {}
+  ## srcds service configuration
+  ##
+  service:
+    ## @param srcds.service.type Kubernetes Service type
+    ##
+    type: LoadBalancer
+    ## @param srcds.service.ports ports
+    ##
+    ports:
+      ## @param srcds.service.ports.game
+      ##
+      game: 30016
+      ## @param srcds.service.ports.sourcetv
+      ##
+      sourcetv: 30021
+      ## @param srcds.service.ports.client
+      ##
+      client: 30006
+      ## @param srcds.service.ports.steam
+      ##
+      steam: 30901
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param srcds.service.nodePorts ports
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      ## @param srcds.service.nodePorts.game
+      ##
+      game: 30016
+      ## @param srcds.service.nodePorts.sourcetv
+      ##
+      sourcetv: 30021
+      ## @param srcds.service.nodePorts.client
+      ##
+      client: 30006
+      ## @param srcds.service.nodePorts.steam
+      ##
+      steam: 30901
+    ## @param srcds.service.clusterIP Static clusterIP or None for headless services
+    ## e.g:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param srcds.service.annotations Annotations for srcds service
+    ##
+    annotations:
+      metallb.universe.tf/allow-shared-ip: ingress-nginx
+    ## @param srcds.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
+    ## Set the LoadBalancer service type to internal only
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: "149.202.65.122"
+    ## @param srcds.service.externalTrafficPolicy Enable client source IP preservation
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param srcds.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param srcds.service.extraPorts Extra ports to expose in the srcds service
+    ##
+    extraPorts: []
+    ## @param srcds.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param srcds.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## srcds persistence configuration
+  ##
+  persistence:
+    ## @param srcds.persistence.enabled Enable srcds data persistence using PVC
+    ##
+    enabled: true
+    ## @param srcds.persistence.existingClaim Name of an existing PVC to use
+    ##
+    existingClaim: ""
+    ## @param srcds.persistence.mountPath The path the volume will be mounted at
+    ## Note: useful when using custom images
+    ##
+    mountPath: /app
+    ## @param srcds.persistence.subPath The subdirectory of the volume to mount to
+    ## Useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param srcds.persistence.storageClass PVC Storage Class for srcds data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: "openebs-hostpath"
+    ## @param srcds.persistence.accessModes PVC Access Mode for volume
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param srcds.persistence.size PVC Storage Request for volume
+    ##
+    size: 4Gi
+    ## @param srcds.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param srcds.persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param srcds.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+
+## @section NetworkPolicy parameters
+
+## Add networkpolicies
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ##
+  enabled: false
+  ## @param networkPolicy.metrics.enabled Enable network policies for metrics (prometheus)
+  ## @param networkPolicy.metrics.namespaceSelector [object] Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podSelector [object] Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  ##
+  metrics:
+    enabled: false
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: monitoring
+    ##
+    namespaceSelector: {}
+    ## e.g:
+    ## podSelector:
+    ##   label: monitoring
+    ##
+    podSelector: {}
+  ## Ingress Rules
+  ##
+  ingressRules:
+    ## @param networkPolicy.ingressRules.srcdsAccessOnlyFrom.enabled Enable ingress rule that makes srcds node only accessible from a particular origin.
+    ## @param networkPolicy.ingressRules.srcdsAccessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access the srcds node. This label will be used to identified the allowed namespace(s).
+    ## @param networkPolicy.ingressRules.srcdsAccessOnlyFrom.podSelector [object] Pods selector label that is allowed to access the srcds node. This label will be used to identified the allowed pod(s).
+    ## @param networkPolicy.ingressRules.srcdsAccessOnlyFrom.customRules [object] Custom network policy for the srcds node.
+    ##
+    srcdsAccessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+      ## custom ingress rules
+      ## e.g:
+      ## customRules:
+      ##   - from:
+      ##       - namespaceSelector:
+      ##           matchLabels:
+      ##             label: example
+      customRules: {}
+    ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.enabled Enable ingress rule that makes read-only nodes only accessible from a particular origin.
+    ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access the read-only nodes. This label will be used to identified the allowed namespace(s).
+    ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector [object] Pods selector label that is allowed to access the read-only nodes. This label will be used to identified the allowed pod(s).
+    ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules [object] Custom network policy for the read-only nodes.
+    ##
+    readReplicasAccessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+      ## custom ingress rules
+      ## e.g:
+      ## CustomRules:
+      ##   - from:
+      ##       - namespaceSelector:
+      ##           matchLabels:
+      ##             label: example
+      customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  ##
+  egressRules:
+    # Deny connections to external. This is not compatible with an external database.
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}
+
+## @section Volume Permissions parameters
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
+  ##
+  enabled: true
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r22
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
+  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container' Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ##
+  containerSecurityContext:
+    runAsUser: 0
+
+## @section Other Parameters
+
+## Service account for to use.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for pod
+  ##
+  create: false
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+  ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
+## Creates role for ServiceAccount
+## @param rbac.create Create Role and RoleBinding (required for PSP to work)
+##
+rbac:
+  create: false
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+## Pod Security Policy
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
+##
+psp:
+  create: false
+
+## @section Metrics Parameters
+
+metrics:
+  ## @param metrics.enabled Start a prometheus exporter
+  ##
+  enabled: false
+  ## @param metrics.image.registry Prometheus Exporter image registry
+  ## @param metrics.image.repository Prometheus Exporter image repository
+  ## @param metrics.image.tag Prometheus Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Prometheus Exporter image pull policy
+  ## @param metrics.image.pullSecrets Specify image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: corentincl/srcds_exporter
+    tag: 2.1.0
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param metrics.customMetrics Define additional custom metrics
+  ## ref: https://github.com/wrouesnel/postgres_exporter#adding-new-metrics-via-a-config-file
+  ## customMetrics:
+  ##   pg_database:
+  ##     query: "SELECT d.datname AS name, CASE WHEN pg_catalog.has_database_privilege(d.datname, 'CONNECT') THEN pg_catalog.pg_database_size(d.datname) ELSE 0 END AS size_bytes FROM pg_catalog.pg_database d where datname not in ('template0', 'template1', 'postgres')"
+  ##     metrics:
+  ##       - name:
+  ##           usage: "LABEL"
+  ##           description: "Name of the database"
+  ##       - size_bytes:
+  ##           usage: "GAUGE"
+  ##           description: "Size of the database in bytes"
+  ##
+  customMetrics: {}
+  ## @param metrics.extraEnvVars Extra environment variables to add to Prometheus exporter
+  ## see: https://github.com/wrouesnel/postgres_exporter#environment-variables
+  ## For example:
+  ##  extraEnvVars:
+  ##  - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
+  ##    value: "true"
+  ##
+  extraEnvVars: []
+  ## Prometheus exporter containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param metrics.containerSecurityContext.enabled Enable Prometheus exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set Prometheus exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Prometheus exporter containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## Configure extra options for Prometheus exporter containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on Prometheus exporter containers
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on Prometheus exporter containers
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param metrics.startupProbe.enabled Enable startupProbe on Prometheus exporter containers
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param metrics.containerPorts.metrics Prometheus exporter metrics container port
+  ##
+  containerPorts:
+    metrics: 9591
+  ## SRCDS Prometheus exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param metrics.resources.limits The resources limits for the Prometheus exporter container
+  ## @param metrics.resources.requests The requested resources for the Prometheus exporter container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Service configuration
+  ##
+  service:
+    ## @param metrics.service.ports.metrics Prometheus Exporter service port
+    ##
+    ports:
+      metrics: 9591
+    ## @param metrics.service.clusterIP Static clusterIP or None for headless services
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ##
+    clusterIP: ""
+    ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.annotations [object] Annotations for Prometheus to auto-discover the metrics endpoint
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.ports.metrics }}"
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+  ## Custom PrometheusRule to be defined
+  ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Create a PrometheusRule for Prometheus Operator
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.labels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.prometheusRule.rules PrometheusRule definitions
+    ## Make sure to constraint the rules to the current service.
+    ## rules:
+    ##   - alert: HugeReplicationLag
+    ##     expr: pg_replication_lag{service="{{ printf "%s-metrics" (include "common.names.fullname" .) }}"} / 3600 > 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: replication for {{ include "common.names.fullname" . }} is lagging by {{ "{{ $value }}" }} hour(s).
+    ##       summary: replication is lagging by {{ "{{ $value }}" }} hour(s).
+    ##
+    rules: []
