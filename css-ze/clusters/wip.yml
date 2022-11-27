@@ -230,6 +230,10 @@ srcdsknight:
         url: https://github.com/srcdslab/sm-plugin-AntiJumpSpam/releases/download/latest/sm-plugin-AntiJumpSpam-latest.tar.gz
       autorecorder:
         url: https://github.com/srcdslab/sm-plugin-AutoRecorder/releases/download/latest/sm-plugin-AutoRecorder-latest.tar.gz
+      bosshp:
+        url: https://github.com/srcdslab/sm-plugin-BossHP/releases/download/latest/sm-plugin-BossHP-latest.tar.gz
+      bosshud:
+        url: https://github.com/srcdslab/sm-plugin-BossHUD/releases/download/latest/sm-plugin-BossHUD-latest.tar.gz
       buttonnotifier:
         url: https://github.com/srcdslab/sm-plugin-ButtonNotifier/releases/download/latest/sm-plugin-ButtonNotifier-latest.tar.gz
       cidr:
@@ -265,41 +269,41 @@ srcdsknight:
       fixconnectionexploit:
         url: https://github.com/srcdslab/sm-plugin-FixConnectionExploit/releases/download/latest/sm-plugin-FixConnectionExploit-latest.tar.gz
       fixfirebullets:
-        url: https://github.com/maxime1907/sm-plugin-fixfirebullets/releases/download/latest/fixfirebullets-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-fixfirebullets/releases/download/latest/sm-plugin-fixfirebullets-latest.tar.gz
       fixfuncrotating:
-        url: https://github.com/maxime1907/sm-plugin-FixFuncRotating/releases/download/latest/FixFuncRotating-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixFuncRotating/releases/download/latest/sm-plugin-FixFuncRotating-latest.tar.gz
       fixgameui:
-        url: https://github.com/maxime1907/sm-plugin-FixGameUI/releases/download/latest/FixGameUI-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixGameUI/releases/download/latest/sm-plugin-FixGameUI-latest.tar.gz
       fixladdergravity:
-        url: https://github.com/maxime1907/sm-plugin-FixLadderGravity/releases/download/latest/FixLadderGravity-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixLadderGravity/releases/download/latest/sm-plugin-FixLadderGravity-latest.tar.gz
       fixmemoryleak:
-        url: https://github.com/maxime1907/sm-plugin-FixMemoryLeak/releases/download/latest/FixMemoryLeak-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixMemoryLeak/releases/download/latest/sm-plugin-FixMemoryLeak-latest.tar.gz
       fixnapalmlag:
-        url: https://github.com/maxime1907/sm-plugin-FixNapalmLag/releases/download/latest/FixNapalmLag-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixNapalmLag/releases/download/latest/sm-plugin-FixNapalmLag-latest.tar.gz
       fixnetpublicadr:
-        url: https://github.com/maxime1907/sm-plugin-FixNetPublicAdr/releases/download/latest/FixNetPublicAdr-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixNetPublicAdr/releases/download/latest/sm-plugin-FixNetPublicAdr-latest.tar.gz
       fixplayerequip:
-        url: https://github.com/maxime1907/sm-plugin-FixPlayerEquip/releases/download/latest/FixPlayerEquip-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixPlayerEquip/releases/download/latest/sm-plugin-FixPlayerEquip-latest.tar.gz
       fixpointviewcontrol:
-        url: https://github.com/maxime1907/sm-plugin-FixPointViewControl/releases/download/latest/FixPointViewControl-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixPointViewControl/releases/download/latest/sm-plugin-FixPointViewControl-latest.tar.gz
       fixrng:
-        url: https://github.com/maxime1907/sm-plugin-FixRNG/releases/download/latest/FixRNG-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixRNG/releases/download/latest/sm-plugin-FixRNG-latest.tar.gz
       fixrptexploit:
-        url: https://github.com/maxime1907/sm-plugin-FixRPTExploit/releases/download/latest/FixRPTExploit-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixRPTExploit/releases/download/latest/sm-plugin-FixRPTExploit-latest.tar.gz
       fixsprayexploit:
-        url: https://github.com/maxime1907/sm-plugin-FixSprayExploit/releases/download/latest/FixSprayExploit-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixSprayExploit/releases/download/latest/sm-plugin-FixSprayExploit-latest.tar.gz
       fixsvgravity:
-        url: https://github.com/maxime1907/sm-plugin-FixSvGravity/releases/download/latest/FixSvGravity-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixSvGravity/releases/download/latest/sm-plugin-FixSvGravity-latest.tar.gz
       fixupdateradar:
-        url: https://github.com/maxime1907/sm-plugin-FixUpdateRadar/releases/download/latest/FixUpdateRadar-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FixUpdateRadar/releases/download/latest/sm-plugin-FixUpdateRadar-latest.tar.gz
       flashlight:
-        url: https://github.com/maxime1907/sm-plugin-Flashlight/releases/download/latest/Flashlight-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-Flashlight/releases/download/latest/sm-plugin-Flashlight-latest.tar.gz
       forceinputs:
-        url: https://github.com/maxime1907/sm-plugin-ForceInputs/releases/download/latest/ForceInputs-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-ForceInputs/releases/download/latest/sm-plugin-ForceInputs-latest.tar.gz
       fullupdate:
-        url: https://github.com/maxime1907/sm-plugin-FulUpdate/releases/download/latest/FulUpdate-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FulUpdate/releases/download/latest/sm-plugin-FulUpdate-latest.tar.gz
       glowcolors:
-        url: https://github.com/maxime1907/sm-plugin-GlowColors/releases/download/latest/GlowColors-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-GlowColors/releases/download/latest/sm-plugin-GlowColors-latest.tar.gz
       hitmarker:
         url: https://github.com/srcdslab/sm-plugin-HitMarker/releases/download/latest/sm-plugin-HitMarker-latest.tar.gz
       lagreducer:
@@ -338,8 +342,8 @@ srcdsknight:
         url: https://github.com/srcdslab/sm-plugin-SelfMute/releases/download/latest/sm-plugin-SelfMute-latest.tar.gz
       selfmuteradio:
         url: https://github.com/srcdslab/sm-plugin-SelfMuteRadio/releases/download/latest/sm-plugin-SelfMuteRadio-latest.tar.gz
-      serveradvertisement:
-        url: https://github.com/srcdslab/sm-plugin-ServerAdvertisement/releases/download/latest/sm-plugin-ServerAdvertisement-latest.tar.gz
+      serveradvertisements:
+        url: https://github.com/srcdslab/sm-plugin-ServerAdvertisements/releases/download/latest/sm-plugin-ServerAdvertisements-latest.tar.gz
       sourcechatrelay:
         url: https://github.com/srcdslab/sm-plugin-SourceChatRelay/releases/download/latest/sm-plugin-SourceChatRelay-latest.tar.gz
       spectate:
@@ -357,19 +361,19 @@ srcdsknight:
       teammanager:
         url: https://github.com/srcdslab/sm-plugin-TeamManager/releases/download/latest/sm-plugin-TeamManager-latest.tar.gz
       vipcore:
-        url: https://github.com/srcdslab/sm-plugin-VIP-Core/releases/download/latest/sm-plugin-VIP_Core-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-VIP-Core/releases/download/latest/sm-plugin-VIP-Core-latest.tar.gz
       vipcustomfeatures:
-        url: https://github.com/srcdslab/sm-plugin-VIP-CustomFeatures/releases/download/latest/sm-plugin-VIP_CustomFeatures-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-VIP_CustomFeatures/releases/download/latest/sm-plugin-VIP_CustomFeatures-latest.tar.gz
       vipfreevipgiveaway:
-        url: https://github.com/srcdslab/sm-plugin-VIP-FreeVIPGiveaway/releases/download/latest/sm-plugin-VIP_FreeVIPGiveaway-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-VIP_FreeVIPGiveaway/releases/download/latest/sm-plugin-VIP_FreeVIPGiveaway-latest.tar.gz
       vipsourcemodflags:
-        url: https://github.com/srcdslab/sm-plugin-VIP-SourcemodFlags/releases/download/latest/sm-plugin-VIP_SourcemodFlags-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-VIP_SourcemodFlags/releases/download/latest/sm-plugin-VIP_SourcemodFlags-latest.tar.gz
       viptag:
-        url: https://github.com/srcdslab/sm-plugin-VIP-Tag/releases/download/latest/sm-plugin-VIP_Tag-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-VIP_Tag/releases/download/latest/sm-plugin-VIP_Tag-latest.tar.gz
       viptest:
-        url: https://github.com/srcdslab/sm-plugin-VIP-Test/releases/download/latest/sm-plugin-VIP_Test-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-VIP_Test/releases/download/latest/sm-plugin-VIP_Test-latest.tar.gz
       vipvipsonline:
-        url: https://github.com/srcdslab/sm-plugin-VIP-VIPsOnline/releases/download/latest/sm-plugin-VIP_VIPsOnline-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-VIP_VIPsOnline/releases/download/latest/sm-plugin-VIP_VIPsOnline-latest.tar.gz
       zombiereloaded:
         url: https://github.com/srcdslab/sm-plugin-zombiereloaded/releases/download/latest/sm-plugin-zombiereloaded-latest.tar.gz
 
