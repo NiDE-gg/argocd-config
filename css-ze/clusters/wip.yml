@@ -183,7 +183,7 @@ srcdsknight:
       metamod:
         url: https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1148-linux.tar.gz
       sourcemod:
-        url: https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6906-linux.tar.gz
+        url: https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6919-linux.tar.gz
 
       # Sourcemod extensions
       a2sqcache:
@@ -208,8 +208,10 @@ srcdsknight:
         url: https://github.com/srcdslab/sm-ext-sendsnapshotfixer/releases/download/1.0.0/sm-ext-sendsnapshotfixer-1.0.0-linux.tar.gz
       smjansson:
         url: https://github.com/srcdslab/sm-ext-SMJansson/releases/download/2.6.1/sm-ext-SMJansson-2.6.1-linux.tar.gz
+      socket:
+        url: https://github.com/srcdslab/sm-ext-socket/releases/download/v3.0.2/sm-ext-socket-v3.0.2-linux.tar.gz
       steamworks:
-        url: https://github.com/srcdslab/sm-ext-SteamWorks/releases/download/1.2.3/sm-ext-SteamWorks-1.2.3-linux.tar.gz
+        url: https://github.com/srcdslab/sm-ext-SteamWorks/releases/download/v1.2.3/sm-ext-SteamWorks-v1.2.3-linux.tar.gz
       voice:
         url: https://github.com/srcdslab/sm-ext-voice/releases/download/2.0.0/sm-ext-voice-2.0.0-linux.tar.gz
 
@@ -344,6 +346,8 @@ srcdsknight:
         url: https://github.com/srcdslab/sm-plugin-SelfMuteRadio/releases/download/latest/sm-plugin-SelfMuteRadio-latest.tar.gz
       serveradvertisements:
         url: https://github.com/srcdslab/sm-plugin-ServerAdvertisements/releases/download/latest/sm-plugin-ServerAdvertisements-latest.tar.gz
+      sourcebanspp:
+        url: https://github.com/srcdslab/sourcebans-pp/releases/download/latest/sourcebans-pp-latest.tar.gz
       sourcechatrelay:
         url: https://github.com/srcdslab/sm-plugin-SourceChatRelay/releases/download/latest/sm-plugin-SourceChatRelay-latest.tar.gz
       spectate:
