@@ -136,7 +136,7 @@ steam:
 srcdsknight:
   image:
     repository: "ghcr.io/srcdslab/srcdsknight"
-    tag: "v0.0.2"
+    tag: "v0.0.4"
   args:
     - "-vv"
   existingConfigmap: ""
@@ -256,10 +256,12 @@ srcdsknight:
         url: https://github.com/srcdslab/sm-plugin-CountryTags/releases/download/latest/sm-plugin-CountryTags-latest.tar.gz
       customchatcolors:
         url: https://github.com/srcdslab/sm-plugin-CustomChatColors/releases/download/latest/sm-plugin-CustomChatColors-latest.tar.gz
-      discord:
-        url: https://github.com/srcdslab/sm-plugin-Discord/releases/download/latest/sm-plugin-Discord-latest.tar.gz
       devzones:
         url: https://github.com/srcdslab/sm-plugin-DevZones/releases/download/latest/sm-plugin-DevZones-latest.tar.gz
+      dynamichannels:
+        url: https://github.com/srcdslab/sm-plugin-DynamicChannels/releases/download/latest/sm-plugin-DynamicChannels-latest.tar.gz
+      entwatch:
+        url: https://github.com/srcdslab/sm-plugin-EntWatch/releases/download/latest/sm-plugin-EntWatch-latest.tar.gz
       extend:
         url: https://github.com/srcdslab/sm-plugin-Extend/releases/download/latest/sm-plugin-Extend-latest.tar.gz
       extracommands:
