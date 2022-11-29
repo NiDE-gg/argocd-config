@@ -32,7 +32,25 @@ fullnameOverride: ""
 clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
-extraDeploy: []
+extraDeploy:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: srcds-prod-css-ze-extra
+    spec:
+      type: ClusterIP
+      ports:
+        - name: tcp-smjsonapi
+          port: 27021
+          protocol: TCP
+          targetPort: tcp-smjsonapi
+        - name: tcp-voice
+          port: 27020
+          protocol: TCP
+          targetPort: tcp-voice
+      selector:
+        app.kubernetes.io/component: srcds
+
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -102,6 +120,14 @@ containerPorts:
   ##
   steam: 30901
 
+  additionalPorts:
+    - name: tcp-smjsonapi
+      containerPort: 27021
+      protocol: TCP
+    - name: tcp-voice
+      containerPort: 27020
+      protocol: TCP
+
 ## Start pod(s) without limitations on shm memory.
 ## By default docker and containerd (and possibly other container runtimes) limit `/dev/shm` to `64M`
 ## ref: https://github.com/containerd/containerd/issues/3654
@@ -136,9 +162,13 @@ steam:
 srcdsknight:
   image:
     repository: "ghcr.io/srcdslab/srcdsknight"
-    tag: "v0.0.4"
+    tag: "v0.1.1"
+    pullPolicy: "IfNotPresent"
   args:
     - "-vv"
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
   existingConfigmap: ""
   config: |
     installPath: "/app/cstrike"
@@ -149,7 +179,7 @@ srcdsknight:
       ## @param srcds.dependencies.folders.gametype Gametype folder that will be extracted from the dependency archive
       ##
       gametype:
-        path: ""
+        path: "cstrike"
       ## @param srcds.dependencies.folders.common Common list of folders that will be extracted from the dependency archive
       ##
       common:
@@ -305,7 +335,7 @@ srcdsknight:
       forceinputs:
         url: https://github.com/srcdslab/sm-plugin-ForceInputs/releases/download/latest/sm-plugin-ForceInputs-latest.tar.gz
       fullupdate:
-        url: https://github.com/srcdslab/sm-plugin-FulUpdate/releases/download/latest/sm-plugin-FulUpdate-latest.tar.gz
+        url: https://github.com/srcdslab/sm-plugin-FullUpdate/releases/download/latest/sm-plugin-FullUpdate-latest.tar.gz
       glowcolors:
         url: https://github.com/srcdslab/sm-plugin-GlowColors/releases/download/latest/sm-plugin-GlowColors-latest.tar.gz
       hitmarker:
@@ -334,12 +364,6 @@ srcdsknight:
         url: https://github.com/srcdslab/sm-plugin-ReservedSlot/releases/download/latest/sm-plugin-ReservedSlot-latest.tar.gz
       roundtime:
         url: https://github.com/srcdslab/sm-plugin-RoundTime/releases/download/latest/sm-plugin-RoundTime-latest.tar.gz
-      smac:
-        url: https://github.com/srcdslab/sm-plugin-SMAC/releases/download/latest/sm-plugin-SMAC-latest.tar.gz
-      smjsonapi:
-        url: https://github.com/srcdslab/sm-plugin-SMJSONAPI/releases/download/latest/sm-plugin-SMJSONAPI-latest.tar.gz
-      smtextreplace:
-        url: https://github.com/srcdslab/sm-plugin-SMTextReplace/releases/download/latest/sm-plugin-SMTextReplace-latest.tar.gz
       selectivebhop:
         url: https://github.com/srcdslab/sm-plugin-SelectiveBhop/releases/download/latest/sm-plugin-SelectiveBhop-latest.tar.gz
       selfmute:
@@ -348,6 +372,12 @@ srcdsknight:
         url: https://github.com/srcdslab/sm-plugin-SelfMuteRadio/releases/download/latest/sm-plugin-SelfMuteRadio-latest.tar.gz
       serveradvertisements:
         url: https://github.com/srcdslab/sm-plugin-ServerAdvertisements/releases/download/latest/sm-plugin-ServerAdvertisements-latest.tar.gz
+      smac:
+        url: https://github.com/srcdslab/sm-plugin-SMAC/releases/download/latest/sm-plugin-SMAC-latest.tar.gz
+      smjsonapi:
+        url: https://github.com/srcdslab/sm-plugin-SMJSONAPI/releases/download/latest/sm-plugin-SMJSONAPI-latest.tar.gz
+      smtextreplace:
+        url: https://github.com/srcdslab/sm-plugin-SMTextReplace/releases/download/latest/sm-plugin-SMTextReplace-latest.tar.gz
       sourcebanspp:
         url: https://github.com/srcdslab/sourcebans-pp/releases/download/latest/sourcebans-pp-latest.tar.gz
       sourcechatrelay:
@@ -382,6 +412,12 @@ srcdsknight:
         url: https://github.com/srcdslab/sm-plugin-VIP_VIPsOnline/releases/download/latest/sm-plugin-VIP_VIPsOnline-latest.tar.gz
       zombiereloaded:
         url: https://github.com/srcdslab/sm-plugin-zombiereloaded/releases/download/latest/sm-plugin-zombiereloaded-latest.tar.gz
+
+      # Configuration files
+      csszepublic:
+        url: https://gitlab.com/counterstrikesource/gamemode/zombieescape/sourcemod/configurations.git
+        sync: true
+
 
 
 ## @section SRCDS parameters
